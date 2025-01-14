@@ -1,0 +1,235 @@
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWrEfzb5e1gtTwd8By4jOhjjzLAjywRqq5Fw&s");
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  direction: rtl;
+}
+
+/* Login card styles */
+.login-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Login title */
+.login-title {
+  color: white;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Input fields */
+.login-input {
+  width: 100%;
+  padding: 12px 20px;
+  padding-left: 40px; /* Space for icon */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  text-align: right;
+}
+
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.login-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Input with error state */
+.login-input.login-error {
+  border-color: #ff4b4b;
+}
+
+.login-input.login-error:focus {
+  box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.2);
+}
+
+/* Error text */
+.login-error-text {
+  color: #ff4b4b;
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* Remember me checkbox */
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  margin: 15px 0;
+  justify-content: flex-end;
+}
+
+.remember-me input[type="checkbox"] {
+  accent-color: #00ff9d;
+  width: 16px;
+  height: 16px;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #00ff9d, #00ccff);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Forgot password link */
+.forgot-password {
+  color: #ff4b4b;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Register link section */
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  color: white;
+}
+
+.register-link p {
+  margin-bottom: 5px;
+}
+
+.register-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.register-options a {
+  color: #00ff9d;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.register-options a:hover {
+  color: #00ccff;
+}
+
+.register-options .divider {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Alert styles */
+.login-alert {
+  background: rgba(255, 59, 59, 0.1);
+  border: 1px solid rgba(255, 59, 59, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.login-alert-text {
+  color: #ff4b4b;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Input icon styles */
+.input-icon {
+  position: relative;
+}
+
+.input-icon svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  width: 20px;
+  height: 20px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 20px;
+  }
+  
+  .login-title {
+    font-size: 24px;
+  }
+  
+  .login-input {
+    font-size: 14px;
+  }
+  
+  .register-options {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .register-options .divider {
+    display: none;
+  }
+}
+
