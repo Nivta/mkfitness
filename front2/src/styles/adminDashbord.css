@@ -149,6 +149,32 @@
     padding: 2rem;
     color: #64748b;
 }
+/* עיצוב כפתור התנתקות */
+.logout-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-button:hover {
+    background-color: #e04444;
+  }
+  
+  .logout-button:focus {
+    outline: none;
+  }
+  
+  .logout-button svg {
+    vertical-align: middle;
+  }
 
 
   
