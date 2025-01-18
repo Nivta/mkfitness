@@ -1,51 +1,73 @@
-import axios from 'axios';
-import { User } from './UserType';
+import { setIsLoading, setError } from '../state/userSlice'; // ייבוא הפעולות מ-Redux
 
-export const fetchPendingUsers = async (token: string|null, setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>, setError: React.Dispatch<React.SetStateAction<string | null>>) => {
+export async function fetchPendingUsers(
+  token: string | null, 
+  dispatch: React.Dispatch<any>,  // dispatch מ-Redux
+  setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>  // עדכון state מקומי של המשתמשים
+) {
   try {
-    setIsLoading(true);
-    setError(null);
-    const response = await axios.get('http://localhost:3000/admin/pending', {
+    // מתחילים טעינת נתונים
+    dispatch(setIsLoading(true)); // פעולת Redux לעדכון טעינה
+    dispatch(setError(null)); // מאפסים את השגיאה הקודמת
+
+    // בקשת GET לשרת עם ה-token בתור header
+    const response = await axios.get('http://localhost:3000/api/admin/pending', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     });
+
+    // אם אין שגיאה, מעדכנים את הרשימה ב-state המקומי
     setPendingUsers(response.data);
   } catch (error) {
-    setError('שגיאה בטעינת המשתמשים');
-    console.error('Error fetching users:', error);
+    // טיפול בשגיאות אם הייתה בעיה במהלך הבקשה
+    console.error('Error fetching pending users:', error);
+    dispatch(setError('Something went wrong'));  // עדכון שגיאה ב-Redux
   } finally {
-    setIsLoading(false);
+    // סיום טעינה אחרי קריאת השרת
+    dispatch(setIsLoading(false));  // פעולת Redux לעדכון מצב טעינה
   }
-};
-
-export const Approve = async (userId: string, token: string|null, setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>, setError: React.Dispatch<React.SetStateAction<string | null>>) => {
+}
+export const Approve = async (
+  userId: string, 
+  token: string | null, 
+  setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, 
+  dispatch:React.Dispatch<any>,  // dispatch מ-Redux
+) => {
   try {
-    setIsLoading(true);
-    setError(null);
-    await axios.post(`http://localhost:3000/admin/approve/${userId}`, {}, {
+    dispatch(setIsLoading(true));
+    dispatch(setError(null));
+
+    // שליחה לבקשה לאישור המשתמש
+    await axios.post(`http://localhost:3000/api/admin/approve/${userId}`, {}, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     });
-    setPendingUsers(prevUsers =>
-      prevUsers.map(user =>
+
+    // עדכון הסטייט - עדכון הסטטוס ל-active ואז הסרת המשתמש
+    setPendingUsers(prevUsers => {
+      // עדכון הסטטוס של המשתמש המאושר ל-active
+      const updatedUsers = prevUsers.map(user =>
         user.idNumber === userId ? { ...user, status: 'active' } : user
-      )
-    );
+      );
+      
+      // הסרת המשתמש המאושר מתוך הרשימה
+      return updatedUsers.filter(user => user.idNumber !== userId);
+    });
   } catch (error) {
-    setError('שגיאה באישור המשתמש');
+    dispatch(setError('שגיאה באישור המשתמש'));
     console.error('Error approving user:', error);
   } finally {
-    setIsLoading(false);
+    dispatch(setIsLoading(false));
   }
 };
 
-export const Reject = async (userId: string, token: string|null, setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>, setError: React.Dispatch<React.SetStateAction<string | null>>) => {
+export const Reject = async (userId: string, token: string|null, setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, dispatch:React.Dispatch<any>) => {
   try {
-    setIsLoading(true);
-    setError(null);
-    await axios.delete(`http://localhost:3000/admin/deny/${userId}`, {
+    dispatch(setIsLoading(true));
+    dispatch(setError(null));
+    await axios.delete(`http://localhost:3000/api/admin/deny/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -54,9 +76,9 @@ export const Reject = async (userId: string, token: string|null, setPendingUsers
       prevUsers.filter(user => user.idNumber !== userId)
     );
   } catch (error) {
-    setError('שגיאה בדחיית המשתמש');
+    dispatch(setError('שגיאה בדחיית המשתמש'));
     console.error('Error rejecting user:', error);
   } finally {
-    setIsLoading(false);
+    dispatch(setIsLoading(false));
   }
 };
