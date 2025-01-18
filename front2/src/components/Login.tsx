@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import '../styles/Login.css';
-import { useUser } from './UserContext';
-import { UserIcon, LockIcon } from 'lucide-react'; // Add icons import
-import login from "../data/LoginActions"
-
+import { useDispatch } from 'react-redux'; // שימוש ב-dispatch של Redux
+import { setUser, setToken } from '../state/userSlice'; // ייבוא הפעולות שלנו
+import { UserIcon, LockIcon } from 'lucide-react'; // הוספת אייקונים
+import login from "../data/LoginActions"; // ייבוא פונקציית ה-login
+import { Link } from 'react-router-dom';
 
 interface LoginFormData {
   email: string;
@@ -15,20 +15,18 @@ interface LoginFormData {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, setToken } = useUser();
+  const dispatch = useDispatch(); // שימוש ב-dispatch של Redux
 
   const formik = useFormik<LoginFormData>({
     initialValues: {
       email: '',
       password: '',
-      
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('כתובת אימייל לא תקינה')
         .required('שדה חובה'),
-      password: Yup.string()
-        .required('שדה חובה')
+      password: Yup.string().required('שדה חובה'),
     }),
     onSubmit: async (values, { setSubmitting, setStatus }) => {
       try {
@@ -40,17 +38,20 @@ export default function Login() {
           navigate('/dashboard');
         }
 
+        // שליפה של המידע מה-localStorage
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const token = localStorage.getItem('token');
-        setUser(user);
-        setToken(token || '');
-        
+
+        // עדכון ה-user וה-token ב-Redux
+        dispatch(setUser(user));
+        dispatch(setToken(token || ''));
+
       } catch (error) {
         console.error('Login error:', error);
       } finally {
         setSubmitting(false);
       }
-    }
+    },
   });
 
   return (
@@ -105,15 +106,13 @@ export default function Login() {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={formik.isSubmitting}
           >
             {formik.isSubmitting ? 'מתחבר...' : 'התחבר'}
           </button>
-
-          
 
           <div className="register-link">
             <p>אין לך חשבון?</p>
