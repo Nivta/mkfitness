@@ -109,10 +109,10 @@ export default function HealthInfo({ formik }: HealthInfoProps) {
           onBlur={() => setActivityLevelFocused(false)}
         >
           {!activityLevelFocused && <option value="">בחר רמת פעילות</option>}
-          <option value="inactive">לא פעיל</option>
-          <option value="low">נמוכה</option>
-          <option value="medium">בינונית</option>
-          <option value="high">גבוהה</option>
+          <option value="inactive">ישיבה רוב היום עם מעט פעילות</option>
+          <option value="low">פעילות גופנית 1 עד 3 פעמים בשבוע</option>
+          <option value="medium">פעילות גופנית 3 עד 5 פעמים בשבוע</option>
+          <option value="high">פעילות גופנית 6 עד 7 פעמים בשבוע</option>
         </select>
         {formik.touched.activityLevel && formik.errors.activityLevel && (
           <div className="error-message">{formik.errors.activityLevel}</div>
