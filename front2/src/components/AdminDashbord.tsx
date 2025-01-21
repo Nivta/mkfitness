@@ -10,7 +10,7 @@ import { User } from '../data/UserType';
 
   export default function AdminDashbord() {
     const dispatch = useDispatch();
-    const { user, token, isLoading, error } = useSelector((state: RootState) => state.user); // שליפת המידע מ-Redux
+    const { user, token, isLoading, error } = useSelector((state: RootState) => state.userState); // שליפת המידע מ-Redux
     const [searchTerm, setSearchTerm] = useState('');
     const [pendingUsers, setPendingUsers] = useState<User[]>([]);
     const nav=useNavigate();
