@@ -7,32 +7,29 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user); // שליפת המידע מ-Redux
-  const nav=useNavigate()
+  const { user } = useSelector((state: RootState) => state.userState); // שליפת המידע מ-Redux
+  const nav = useNavigate();
 
   // פונקציה שמטפלת בהתנתקות
   function Logout() {
     dispatch(logout()); // שליחת פעולה של התנתקות
-    nav("/")
+    nav("/");
   }
 
   return (
     <div className="dashboard-container">
       <h1>Welcome to the Dashboard</h1>
-      
-      {/* אם יש משתמש מחובר, הצג את פרטי המשתמש */}
-      {user ? (
-        <div>
-          <h2>Hello, {user.fullName}!</h2>
-          <p>Email: {user.email}</p>
-          {/* כפתור התנתקות */}
-          <button className="logout-btn" onClick={Logout}>
-            <LogOut /> Logout
-          </button>
-        </div>
-      ) : (
-        <p>No user logged in.</p>
-      )}
+
+      {/* הצגת פרטי המשתמש או הודעה ב-CSS */}
+      <div className={`user-info ${user ? '' : 'hidden'}`}>
+        <h2>Hello, {user?.fullName}!</h2>
+        <p>Email: {user?.email}</p>
+        {/* כפתור התנתקות */}
+        <button className="logout-btn" onClick={Logout}>
+          <LogOut /> Logout
+        </button>
+      </div>
+        
     </div>
   );
 }
