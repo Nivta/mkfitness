@@ -1,12 +1,14 @@
+
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import '../styles/Login.css';
-import { useDispatch } from 'react-redux'; // שימוש ב-dispatch של Redux
-import { setUser, setToken } from '../state/userSlice'; // ייבוא הפעולות שלנו
-import { UserIcon, LockIcon } from 'lucide-react'; // הוספת אייקונים
-import login from "../data/LoginActions"; // ייבוא פונקציית ה-login
+import { useDispatch } from 'react-redux';
+import { setUser, setToken } from '../state/userSlice';
+import { UserIcon, LockIcon } from 'lucide-react';
+import login from "../data/LoginActions";
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface LoginFormData {
   email: string;
@@ -15,7 +17,33 @@ interface LoginFormData {
 
 export default function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // שימוש ב-dispatch של Redux
+  const dispatch = useDispatch();
+
+  // בדיקת המידע ב-localStorage על מנת לאתחל את ה-Redux store אחרי ריפרוש
+  useEffect(() => {
+    const storedUserState = localStorage.getItem('userState');
+    if (storedUserState) {
+      const { user, token } = JSON.parse(storedUserState);
+      dispatch(setUser(user));
+      if (token) {
+        dispatch(setToken(token));
+      }
+
+      // ניווט לדף המתאים אם המשתמש מחובר
+      if (user) {
+        // אם יש משתמש, נוודא אם מדובר במנהל או משתמש רגיל
+        if (token) {
+          // אם יש טוקן, מדובר במנהל
+          navigate('/adminDashbord');
+        } else {
+          // אם אין טוקן, מדובר במשתמש רגיל
+          navigate('/dashboard');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [dispatch, navigate]);
 
   const formik = useFormik<LoginFormData>({
     initialValues: {
@@ -31,27 +59,20 @@ export default function Login() {
     onSubmit: async (values, { setSubmitting, setStatus }) => {
       try {
         const userType = await login(values, setStatus);
-
-        if (userType === 'admin') {
-          navigate('/adminDashbord');
-        } else if (userType === 'user') {
-          navigate('/dashboard');
+        if (userType) {
+          // ניווט לדף המתאים לאחר ההתחברות
+          if (userType === 'admin') {
+            navigate('/adminDashbord');
+          } else {
+            navigate('/dashboard');
+          }
         }
-
-        // שליפה של המידע מה-localStorage
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const token = localStorage.getItem('token');
-
-        // עדכון ה-user וה-token ב-Redux
-        dispatch(setUser(user));
-        dispatch(setToken(token || ''));
-
       } catch (error) {
         console.error('Login error:', error);
       } finally {
         setSubmitting(false);
       }
-    },
+    }
   });
 
   return (
