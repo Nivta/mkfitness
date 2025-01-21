@@ -1,4 +1,4 @@
-import  { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,8 +15,8 @@ export default function App() {
   const dispatch = useDispatch();
 
   // שליפת מידע מ-Redux Store
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
-  const error = useSelector((state: RootState) => state.user.error);
+  const isLoading = useSelector((state: RootState) => state.userState.isLoading);
+  const error = useSelector((state: RootState) => state.userState.error);
 
   // פונקציה לשליחת בקשה לשרת
   useEffect(() => {
@@ -41,17 +41,12 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/registerAdmin" element={<AdminRegistration />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        {/* הגנה על דף ה-adminDashbord עם PrivateRoute */}
-        <Route
-          path="/adminDashbord"
-          element={
-            <PrivateRoute>
-              <AdminDashbord />
-            </PrivateRoute>
-          }
-        />
+        
+        {/* עטיפת ה-Routes שדורשים גישה פרטית בתוך ה-PrivateRoute */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/adminDashbord" element={<AdminDashbord />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
