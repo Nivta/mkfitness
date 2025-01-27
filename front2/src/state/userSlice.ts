@@ -46,9 +46,3 @@ const userSlice = createSlice({
 export const { setUser, setToken,setIsLoading,setError, logout } = userSlice.actions;
 
 export default userSlice.reducer;
-  },
-});
-
-export const { setUser, setToken,setIsLoading,setError, logout } = userSlice.actions;
-
-export default userSlice.reducer;

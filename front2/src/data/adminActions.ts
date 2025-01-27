@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { User } from './UserType';
+
 import { setIsLoading, setError } from '../state/userSlice'; // ייבוא הפעולות מ-Redux
 
 export async function fetchPendingUsers(

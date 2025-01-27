@@ -18,12 +18,10 @@ export default async function login(
     store.dispatch(setUser(user));
     if (token) {
       store.dispatch(setToken(token));
-    }
-
-    // אם יש טוקן, נשמור גם את ה-token. אם אין טוקן, נשמור רק את המשתמש.
-    if (token) {
       localStorage.setItem('userState', JSON.stringify({ user, token }));
-    } else {
+      
+    }
+ else {
       localStorage.setItem('userState', JSON.stringify({ user }));
     }
 
