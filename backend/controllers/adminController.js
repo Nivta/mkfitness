@@ -4,7 +4,6 @@ const nodemailer = require('nodemailer');
 const getPendingUsers = async (req, res) => {
     try {
         const pendingUsers = await User.find({ status: 'pending' });
-        console.log(pendingUsers)
         res.status(200).json(pendingUsers);
 
     } catch (error) {
