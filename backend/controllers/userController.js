@@ -31,7 +31,27 @@ const registerUser = async (req, res) => {
             from: process.env.EMAIL,
             to: process.env.EMAIL_MANAGER,
             subject: 'New User Registered',
-            text: `A new user has registered:\n\nFull Name: ${newUser.fullName}\nEmail: ${newUser.email}`
+            text: `A new user has registered:\n\n
+            Full Name: ${newUser.fullName}\n
+            Email: ${newUser.email}\n
+            ID Number: ${newUser.idNumber}\n
+            Phone: ${newUser.phone}\n
+            Age: ${newUser.age}\n
+            Height: ${newUser.height}\n
+            Weight: ${newUser.weight}\n
+            Gender: ${newUser.gender}\n
+            Daily Calories: ${newUser.dailyCalories}\n
+            Diet: ${newUser.diet}\n
+            Activity Level: ${newUser.activityLevel || 'Not provided'}\n
+            allergy Foods: ${newUser.dangerousFoods || 'Not provided'}\n
+            Favorite Foods: ${newUser.favoriteFoods || 'Not provided'}\n
+            Dislike Foods: ${newUser.dislikeFoods || 'Not provided'}\n
+            Eats Eggs: ${newUser.eatsEggs ? 'Yes' : 'No'}\n
+            Eats Dairy: ${newUser.eatsDairy ? 'Yes' : 'No'}\n
+            Eats Fish: ${newUser.eatsFish ? 'Yes' : 'No'}\n
+            Goal: ${newUser.goal || 'Not provided'}\n
+            Training Location: ${newUser.trainingLocation || 'Not provided'}\n
+            Status: ${newUser.status}`
         };
 
         await transporter.sendMail(mailOptions);

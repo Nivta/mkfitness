@@ -5,7 +5,6 @@ const User = require('../models/userModel');
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    console.log("email:"+email+"password"+ password)
     const admin = await Admin.findOne({ email });
 
     if (admin) {
