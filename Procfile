@@ -1,1 +1,1 @@
-web: node  mkfitness/backend/server.js
+web: cd backend && npm install && node server.js
