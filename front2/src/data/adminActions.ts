@@ -2,6 +2,7 @@ import axios from 'axios';
 import { User } from './UserType';
 
 import { setIsLoading, setError } from '../state/userSlice'; // ייבוא הפעולות מ-Redux
+import apiURL from './apiConfig';
 
 export async function fetchPendingUsers(
   token: string | null, 
@@ -14,7 +15,7 @@ export async function fetchPendingUsers(
     dispatch(setError(null)); // מאפסים את השגיאה הקודמת
 
     // בקשת GET לשרת עם ה-token בתור header
-    const response = await axios.get('http://localhost:3000/api/admin/pending', {
+    const response = await axios.get(apiURL+"/api/admin/pending", {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -42,7 +43,7 @@ export const Approve = async (
     dispatch(setError(null));
 
     // שליחה לבקשה לאישור המשתמש
-    await axios.post(`http://localhost:3000/api/admin/approve/${userId}`, {}, {
+    await axios.post(apiURL+"/api/admin/approve/${userId}", {}, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -70,7 +71,7 @@ export const Reject = async (userId: string, token: string|null, setPendingUsers
   try {
     dispatch(setIsLoading(true));
     dispatch(setError(null));
-    await axios.delete(`http://localhost:3000/api/admin/deny/${userId}`, {
+    await axios.delete(apiURL+"/api/admin/deny/${userId}", {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
