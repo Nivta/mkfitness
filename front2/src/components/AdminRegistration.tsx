@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'; // ייבוא axios
 import '../styles/AdminRegistration.css'; // ייבוא של קובץ ה-CSS
+import apiURL from '../data/apiConfig';
 
 const AdminRegistration = () => {
   const formik = useFormik({
@@ -19,7 +20,7 @@ const AdminRegistration = () => {
     onSubmit: async (values) => {
       try {
         // קריאה לשרת לשליחת נתוני ההרשמה
-        const response = await axios.post('http://localhost:3000/admin/register', values);
+        const response = await axios.post(apiURL+'/api/admin/register', values);
         console.log('Admin Registered:', response.data);
         // כאן תוכל להציג הודעה או לבצע פעולה אחרת לאחר ההרשמה
         alert('Admin registered successfully!');

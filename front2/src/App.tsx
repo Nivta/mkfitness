@@ -10,6 +10,7 @@ import AdminDashbord from './components/AdminDashbord';
 import PrivateRoute from './components/PrivateRoute'; // ייבוא של ה-PrivateRoute
 import { RootState } from './state/store'; // ייבוא של RootState
 import Dashboard from './components/Dashboard';
+import apiURL from './data/apiConfig';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await axios.get('http://localhost:3000/');
+        await axios.get(apiURL);
         dispatch(setIsLoading(false)); // עדכון מצב טעינה
       } catch (err) {
         dispatch(setError('Something went wrong'));

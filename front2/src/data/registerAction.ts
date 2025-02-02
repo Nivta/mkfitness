@@ -1,6 +1,7 @@
 import { FormValues } from './FormValuesRegister';
 import axios from 'axios';
 import { validationSchema } from './validationSchemaRegistry';
+import apiURL from './apiConfig';
 
 export const registerAction = async (values: FormValues, setSubmitStatus: React.Dispatch<React.SetStateAction<any>>) => {
   try {
@@ -24,7 +25,7 @@ export const registerAction = async (values: FormValues, setSubmitStatus: React.
     console.log('נתונים לשליחה:', formattedValues);
 
     // שליחה לשרת
-    const response = await axios.post('http://localhost:3000/register', formattedValues);
+    const response = await axios.post(apiURL+"/api/users/register", formattedValues);
 
     // אם ההרשמה הצליחה, הצגת הודעת alert
     alert('חכה לאישור מנהל' + response);

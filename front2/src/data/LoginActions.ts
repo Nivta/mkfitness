@@ -2,13 +2,14 @@
 import axios from 'axios';
 import { store } from '../state/store';
 import { setUser, setToken } from '../state/userSlice';
+import apiURL from './apiConfig';
 
 export default async function login(
   values: { email: string; password: string },
   setStatus: any
 ): Promise<string> {
   try {
-    const response = await axios.post('http://localhost:3000/api/auth/login', values);
+    const response = await axios.post(apiURL+"/api/auth/login", values);
     console.log('Response from server:', response.data);
 
     const user = response.data.user;
