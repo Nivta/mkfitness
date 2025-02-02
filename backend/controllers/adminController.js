@@ -38,7 +38,7 @@ const approveUser = async (req, res) => {
             from: process.env.EMAIL,
             to: user.email, // שולחים למייל של המשתמש
             subject: 'Your Account has been Approved',
-            text: `Hello ${user.fullName},\n\nYour account has been approved and is now active.\nYou can now access all the features of the system.\n\nBest regards,\nThe Team`
+            text: "Hello "+user.fullName+"\n\nYour account has been approved and is now active.\nYou can now access all the features of the system.\n\nClick on the following link to access the system: https://mk-fitness-2428d45de5f6.herokuapp.com/"
         };
 
         // שליחת המייל
