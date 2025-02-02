@@ -38,7 +38,7 @@ export const Approve = async (
   setPendingUsers: React.Dispatch<React.SetStateAction<User[]>>, 
   dispatch:React.Dispatch<any>,  // dispatch מ-Redux
 ) => {
-  console.log(userId)
+  
   try {
     dispatch(setIsLoading(true));
     dispatch(setError(null));
@@ -49,6 +49,7 @@ export const Approve = async (
         'Authorization': `Bearer ${token}`,
       },
     });
+    console.log(userId)
 
     // עדכון הסטייט - עדכון הסטטוס ל-active ואז הסרת המשתמש
     setPendingUsers(prevUsers => {
