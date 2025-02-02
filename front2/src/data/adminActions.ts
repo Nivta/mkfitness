@@ -44,7 +44,7 @@ export const Approve = async (
     dispatch(setError(null));
 
     // שליחה לבקשה לאישור המשתמש
-    await axios.post(apiURL+"/api/admin/approve/${userId}", {}, {
+    await axios.post(apiURL+"/api/admin/approve/"+userId, {}, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -73,7 +73,7 @@ export const Reject = async (userId: string, token: string|null, setPendingUsers
   try {
     dispatch(setIsLoading(true));
     dispatch(setError(null));
-    await axios.delete(apiURL+"/api/admin/deny/${userId}", {
+    await axios.delete(apiURL+"/api/admin/deny/"+userId, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
