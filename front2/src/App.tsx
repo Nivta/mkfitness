@@ -26,6 +26,7 @@ export default function App() {
         await axios.get(apiURL);
         dispatch(setIsLoading(false)); // עדכון מצב טעינה
       } catch (err) {
+        console.error("Error during API call:", err);
         dispatch(setError('Something went wrong'));
         dispatch(setIsLoading(false)); // עדכון מצב טעינה
       }
