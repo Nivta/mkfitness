@@ -139,8 +139,7 @@ export default function Login() {
             <p>אין לך חשבון?</p>
             <div className="register-options">
               <Link to="/register">צור משתמש חדש</Link>
-              <span className="divider">|</span>
-              <Link to="/registerAdmin">הרשמה כמנהל</Link>
+
             </div>
           </div>
         </form>
