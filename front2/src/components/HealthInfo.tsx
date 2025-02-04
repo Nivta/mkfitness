@@ -110,9 +110,9 @@ export default function HealthInfo({ formik }: HealthInfoProps) {
         >
           {!activityLevelFocused && <option value="">בחר רמת פעילות</option>}
           <option value="inactive">ישיבה רוב היום עם מעט פעילות</option>
-          <option value="low">פעילות גופנית 1 עד 3 פעמים בשבוע</option>
-          <option value="medium">פעילות גופנית 3 עד 5 פעמים בשבוע</option>
-          <option value="high">פעילות גופנית 6 עד 7 פעמים בשבוע</option>
+          <option value="low"> אתה עובד בעבודה פיזית קלה /או עוסק בפעילות גופנית קלה 1-3 פעמים בשבוע </option>
+          <option value="medium">אתה עובד בעבודה פיזית /או עוסק בפעילות גופנית 3-5 פעמים בשבוע</option>
+          <option value="high">אתה עובד בעבודה פיזית קשה /או עוסק בפעילות גופנית קשה 6-7</option>
         </select>
         {formik.touched.activityLevel && formik.errors.activityLevel && (
           <div className="error-message">{formik.errors.activityLevel}</div>
