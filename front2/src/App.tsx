@@ -18,7 +18,7 @@ export default function App() {
   // שליפת מידע מ-Redux Store
   const isLoading = useSelector((state: RootState) => state.userState.isLoading);
   const error = useSelector((state: RootState) => state.userState.error);
-
+console.log(process.env)
   // פונקציה לשליחת בקשה לשרת
   useEffect(() => {
     const fetchData = async () => {
