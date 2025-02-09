@@ -22,6 +22,8 @@ export default function Login() {
   // בדיקת המידע ב-localStorage על מנת לאתחל את ה-Redux store אחרי ריפרוש
   useEffect(() => {
     const storedUserState = localStorage.getItem('userState');
+    console.log(storedUserState);
+
     if (storedUserState) {
       const { user, token } = JSON.parse(storedUserState);
       dispatch(setUser(user));
