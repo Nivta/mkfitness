@@ -9,21 +9,21 @@ export default async function login(
   setStatus: any
 ): Promise<string> {
   try {
-    const response = await axios.post(apiURL+"/api/auth/login", values);
+    const response = await axios.post(apiURL + "/api/auth/login", values);
     console.log('Response from server:', response.data);
 
     const user = response.data.user;
     const token = response.data.token;
 
-    // עדכון ה-Redux store במקום localStorage
+    // עדכון ה-Redux store
     store.dispatch(setUser(user));
     if (token) {
       store.dispatch(setToken(token));
-      localStorage.setItem('userState', JSON.stringify({ user, token }));
-      
-    }
- else {
-      localStorage.setItem('userState', JSON.stringify({ user }));
+      // שמירת המשתמש, הטוקן וזמן התחברות ב-localStorage
+      localStorage.setItem('userState', JSON.stringify({ user, token, loginTimestamp: Date.now() }));
+    } else {
+      // במקרה שאין טוקן (למשתמש רגיל), עדיין נשמור את הזמן
+      localStorage.setItem('userState', JSON.stringify({ user, loginTimestamp: Date.now() }));
     }
 
     // החזרת סוג המשתמש
@@ -41,3 +41,4 @@ export default async function login(
     throw new Error('Login failed');
   }
 }
+
