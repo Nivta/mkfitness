@@ -1,4 +1,7 @@
-
+export interface HealthQuestion {
+  question: string;
+  answer: string;
+}
 
 // סוג עבור משתמש רגיל
 export interface User {
@@ -22,8 +25,8 @@ export interface User {
     goal: string;
     trainingLocation: string;
     acceptTerms: boolean;
-    status: string
-    
+    healthQuestions: HealthQuestion[];
+    status: string 
   }
   
   // סוג עבור Admin

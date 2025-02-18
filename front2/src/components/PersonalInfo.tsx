@@ -3,9 +3,11 @@ import { FormValues } from '../data/FormValuesRegister';
 
 interface PersonalInfoProps {
   formik: FormikProps<FormValues>;
+  goNext: () => void;
+    
 }
 
-export default function PersonalInfo({ formik }: PersonalInfoProps) {
+export default function PersonalInfo({ formik, goNext }: PersonalInfoProps) {
   return (
     <div className="form-section">
       <h3 className="section-title">פרטים אישיים</h3>
@@ -77,6 +79,9 @@ export default function PersonalInfo({ formik }: PersonalInfoProps) {
           <div className="error-message">{formik.errors.phone}</div>
         )}
       </div>
+      <div className="button-group">
+            <button type="button" className="next-button" onClick={() => goNext()}>הבא →</button>
+          </div>
     </div>
   );
 }

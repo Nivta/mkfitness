@@ -25,5 +25,13 @@ export const validationSchema = Yup.object({
   dislikeFoods: Yup.string(),
   trainingLocation: Yup.string().required('מיקום אימון נדרש'),
   acceptTerms: Yup.boolean().oneOf([true], 'יש לאשר את התנאים וההגבלות'),
-  diet: Yup.mixed().nullable()
+  diet: Yup.mixed().nullable(),
+  healthQuestions: Yup.array().of(
+    Yup.object().shape({
+      question: Yup.string().required(),
+      answer: Yup.string().required('יש לבחור תשובה'),
+    })
+  ),
 });
+
+

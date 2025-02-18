@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +11,12 @@ import PrivateRoute from './components/PrivateRoute'; // ייבוא של ה-Priv
 import { RootState } from './state/store'; // ייבוא של RootState
 import Dashboard from './components/Dashboard';
 import apiURL from './data/apiConfig';
+import HealthDeclarationPage from './components/HealthDeclarationPage';
+import { User } from './data/UserType';
 
 export default function App() {
   const dispatch = useDispatch();
-
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   // שליפת מידע מ-Redux Store
   const isLoading = useSelector((state: RootState) => state.userState.isLoading);
   const error = useSelector((state: RootState) => state.userState.error);
@@ -43,11 +45,13 @@ console.log(process.env)
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/registerAdmin" element={<AdminRegistration />} />
+        <Route path="/health-declaration" element={<HealthDeclarationPage selectedUser={selectedUser} />} />
         
         {/* עטיפת ה-Routes שדורשים גישה פרטית בתוך ה-PrivateRoute */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/adminDashbord" element={<AdminDashbord />} />
+          <Route path="/adminDashbord" element={<AdminDashbord setSelectedUser={setSelectedUser}/>} />
+
         </Route>
       </Routes>
     </BrowserRouter>

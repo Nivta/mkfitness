@@ -6,9 +6,11 @@ import { calculateBMR, calculateCalories } from '../data/calculateHealthInfo'; /
 
 interface HealthInfoProps {
   formik: FormikProps<FormValues>;
+  goNext: () => void;
+  goBack: () => void;
 }
 
-export default function HealthInfo({ formik }: HealthInfoProps) {
+export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) {
   const [genderFocused, setGenderFocused] = useState(false);
   const [activityLevelFocused, setActivityLevelFocused] = useState(false);
   const dailyCaloriesRef = useRef<number | null>(formik.values.dailyCalories); // שמירה על הערך הקודם של dailyCalories
@@ -138,6 +140,10 @@ export default function HealthInfo({ formik }: HealthInfoProps) {
         {formik.touched.dangerousFoods && formik.errors.dangerousFoods && (
           <div className="error-message">{formik.errors.dangerousFoods}</div>
         )}
+      </div>
+      <div className="button-group">
+            <button type="button" className="next-button" onClick={goNext}>הבא →</button>
+            <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
       </div>
     </div>
   );

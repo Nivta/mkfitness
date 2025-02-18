@@ -3,9 +3,11 @@ import { FormValues } from '../data/FormValuesRegister';
 
 interface DietaryPreferencesProps {
   formik: FormikProps<FormValues>;
+  goNext: () => void;
+  goBack: () => void;
 }
 
-export default function DietaryPreferences({ formik }: DietaryPreferencesProps) {
+export default function DietaryPreferences({ formik, goNext, goBack }: DietaryPreferencesProps) {
   const { diet, eatsEggs, eatsDairy, eatsFish } = formik.values;
 
   const isMeatSelected = diet === 'meat';
@@ -121,6 +123,10 @@ export default function DietaryPreferences({ formik }: DietaryPreferencesProps) 
           rows={4}
           {...formik.getFieldProps('dislikeFoods')}
         />
+      </div>
+      <div className="button-group">
+        <button type="button" className="next-button" onClick={goNext}>הבא →</button>
+        <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
       </div>
     </div>
   );

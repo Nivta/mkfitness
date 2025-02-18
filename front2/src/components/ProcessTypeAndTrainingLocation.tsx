@@ -4,9 +4,10 @@ import { useState } from 'react';
 
 interface ProcessTypeAndTrainingLocationProps {
   formik: FormikProps<FormValues>;
+  goBack: () => void;
 }
 
-export default function ProcessTypeAndTrainingLocation({ formik }: ProcessTypeAndTrainingLocationProps) {
+export default function ProcessTypeAndTrainingLocation({ formik,goBack }: ProcessTypeAndTrainingLocationProps) {
   // יצירת מצב לפוקוס של כל select
   const [processTypeFocused, setProcessTypeFocused] = useState(false);
   const [trainingLocationFocused, setTrainingLocationFocused] = useState(false);
@@ -49,6 +50,10 @@ export default function ProcessTypeAndTrainingLocation({ formik }: ProcessTypeAn
           <div className="error-message">{formik.errors.trainingLocation}</div>
         )}
       </div>
+      <div className="button-group">
+            <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
+            
+          </div>
     </div>
   );
 }
