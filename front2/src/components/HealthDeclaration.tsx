@@ -1,43 +1,59 @@
+import { useEffect } from 'react';
 import { FormikProps } from 'formik';
-import { FormValues } from '../data/FormValuesRegister';
+import { User } from '../data/UserType';
 
-interface Props {
-  formik: FormikProps<FormValues>;
+interface HealthDeclarationProps {
+  formik: FormikProps<User>;
   goNext: () => void;
   goBack: () => void;
+  initialValues?: User; // ערכים קיימים במצב עריכה
 }
 
-export default function HealthDeclaration({ formik, goNext, goBack }: Props) {
+export default function HealthDeclaration({ formik, goNext, goBack, initialValues }: HealthDeclarationProps) {
+  // בעת טעינת הרכיב, אם יש ערכים ראשוניים - נעדכן אותם ב-Formik
+  useEffect(() => {
+    if (initialValues?.healthQuestions) {
+      formik.setFieldValue('healthQuestions', initialValues.healthQuestions);
+    }
+  }, [initialValues, formik.setFieldValue]);
+
   return (
-    <div>
-      <h2>הצהרת בריאות</h2>
+    <div className="form-section">
+      <h3 className="section-title">הצהרת בריאות</h3>
+
       {formik.values.healthQuestions.map((item, index) => (
-        <div key={index} className="health-question">
+        <div key={index} className="form-group">
           <p>{item.question}</p>
+
           <label>
             <input
               type="radio"
               name={`healthQuestions.${index}.answer`}
               value="כן"
-              checked={item.answer === "כן"}
+              checked={formik.values.healthQuestions[index]?.answer === "כן"}
               onChange={() => formik.setFieldValue(`healthQuestions.${index}.answer`, "כן")}
             />
             כן
           </label>
+
           <label>
             <input
               type="radio"
               name={`healthQuestions.${index}.answer`}
               value="לא"
-              checked={item.answer === "לא"}
+              checked={formik.values.healthQuestions[index]?.answer === "לא"}
               onChange={() => formik.setFieldValue(`healthQuestions.${index}.answer`, "לא")}
             />
             לא
           </label>
         </div>
       ))}
-      <button onClick={goBack}>חזור</button>
-      <button onClick={goNext}>המשך</button>
+
+      {/* כפתורי ניווט */}
+      <div className="button-group">
+        <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
+        <button type="button" className="next-button" onClick={goNext}>הבא →</button>
+      </div>
     </div>
   );
 }

@@ -1,9 +1,10 @@
-import { FormValues } from './FormValuesRegister';
+
 import axios from 'axios';
 import { validationSchema } from './validationSchemaRegistry';
 import apiURL from './apiConfig';
+import { User } from './UserType';
 
-export const registerAction = async (values: FormValues, setSubmitStatus: React.Dispatch<React.SetStateAction<any>>) => {
+export const registerAction = async (values: User, setSubmitStatus: React.Dispatch<React.SetStateAction<any>>) => {
   try {
     // עדכון סטטוס: התחלת שליחה
     setSubmitStatus({ isSubmitting: true, success: "", error: "" });

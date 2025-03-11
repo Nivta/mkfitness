@@ -1,31 +1,40 @@
-
 import { FormikProps } from 'formik';
-import { FormValues } from '../data/FormValuesRegister';
 import { useEffect, useRef, useState } from 'react';
-import { calculateBMR, calculateCalories } from '../data/calculateHealthInfo'; // ייבוא הפונקציות
+import { calculateBMR, calculateCalories } from '../data/calculateHealthInfo';
+import { User } from '../data/UserType';
 
 interface HealthInfoProps {
-  formik: FormikProps<FormValues>;
+  formik: FormikProps<User>;
   goNext: () => void;
   goBack: () => void;
+  initialValues?: User;
 }
 
-export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) {
+export default function HealthInfo({ formik, goNext, goBack, initialValues }: HealthInfoProps) {
   const [genderFocused, setGenderFocused] = useState(false);
   const [activityLevelFocused, setActivityLevelFocused] = useState(false);
-  const dailyCaloriesRef = useRef<number | null>(formik.values.dailyCalories); // שמירה על הערך הקודם של dailyCalories
+  const dailyCaloriesRef = useRef<number | null>(formik.values.dailyCalories);
+
+  console.log("Gender value in formik:", formik.values.gender);
+
+  useEffect(() => {
+    console.log("Updated formik values:", formik.values);
+    console.log("Current gender value:", formik.values.gender);
+    console.log("Current activity level:", formik.values.activityLevel);
+  }, [formik.values]);
 
   useEffect(() => {
     const bmr = calculateBMR(formik.values.age, formik.values.height, formik.values.weight, formik.values.gender);
     const dailyCalories = calculateCalories(bmr, formik.values.activityLevel);
 
-    // אם הערך של dailyCalories השתנה, נעדכן את ה-Formik
+    console.log("Calculated BMR:", bmr);
+    console.log("Calculated Daily Calories:", dailyCalories);
+
     if (dailyCalories !== dailyCaloriesRef.current) {
-      // אם יש שינוי, נשמור את הערך החדש ב-ref
       dailyCaloriesRef.current = dailyCalories;
 
-      // אם הערך השתנה, עדכון ה-Formik
       if (dailyCalories !== null) {
+        console.log("Updating formik field: dailyCalories ->", dailyCalories);
         formik.setFieldValue('dailyCalories', dailyCalories);
       }
     }
@@ -41,7 +50,7 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
     <div className="form-section">
       <h3 className="section-title">פרטי בריאות</h3>
 
-      {/* שדות גיל, גובה ומשקל בשורה אחת */}
+      {/* גיל, גובה, משקל */}
       <div className="measurements-grid">
         <div className="form-group">
           <input
@@ -50,6 +59,7 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
             className={`form-input ${formik.errors.age && formik.touched.age ? 'error' : ''}`}
             placeholder="גיל"
             {...formik.getFieldProps('age')}
+            defaultValue={initialValues?.age || ''}
           />
           {formik.touched.age && formik.errors.age && (
             <div className="error-message">{formik.errors.age}</div>
@@ -63,6 +73,7 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
             className={`form-input ${formik.errors.height && formik.touched.height ? 'error' : ''}`}
             placeholder="גובה"
             {...formik.getFieldProps('height')}
+            defaultValue={initialValues?.height || ''}
           />
           {formik.touched.height && formik.errors.height && (
             <div className="error-message">{formik.errors.height}</div>
@@ -76,6 +87,7 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
             className={`form-input ${formik.errors.weight && formik.touched.weight ? 'error' : ''}`}
             placeholder="משקל"
             {...formik.getFieldProps('weight')}
+            defaultValue={initialValues?.weight || ''}
           />
           {formik.touched.weight && formik.errors.weight && (
             <div className="error-message">{formik.errors.weight}</div>
@@ -93,8 +105,8 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
           onBlur={() => setGenderFocused(false)}
         >
           {!genderFocused && <option value="">בחר מין</option>}
-          <option value="male">זכר</option>
-          <option value="female">נקבה</option>
+          <option value="male" selected={initialValues?.gender === 'male'}>זכר</option>
+          <option value="female" selected={initialValues?.gender === 'female'}>נקבה</option>
         </select>
         {formik.touched.gender && formik.errors.gender && (
           <div className="error-message">{formik.errors.gender}</div>
@@ -111,10 +123,10 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
           onBlur={() => setActivityLevelFocused(false)}
         >
           {!activityLevelFocused && <option value="">בחר רמת פעילות</option>}
-          <option value="inactive">ישיבה רוב היום עם מעט פעילות</option>
-          <option value="low"> אתה עובד בעבודה פיזית קלה /או עוסק בפעילות גופנית קלה 1-3 פעמים בשבוע </option>
-          <option value="medium">אתה עובד בעבודה פיזית /או עוסק בפעילות גופנית 3-5 פעמים בשבוע</option>
-          <option value="high">אתה עובד בעבודה פיזית קשה /או עוסק בפעילות גופנית קשה 6-7</option>
+          <option value="inactive" selected={initialValues?.activityLevel === 'inactive'}>ישיבה רוב היום עם מעט פעילות</option>
+          <option value="low" selected={initialValues?.activityLevel === 'low'}>פעילות קלה 1-3 פעמים בשבוע</option>
+          <option value="medium" selected={initialValues?.activityLevel === 'medium'}>פעילות 3-5 פעמים בשבוע</option>
+          <option value="high" selected={initialValues?.activityLevel === 'high'}>פעילות קשה 6-7 פעמים בשבוע</option>
         </select>
         {formik.touched.activityLevel && formik.errors.activityLevel && (
           <div className="error-message">{formik.errors.activityLevel}</div>
@@ -134,20 +146,24 @@ export default function HealthInfo({ formik, goNext, goBack }: HealthInfoProps) 
           type="text"
           id="dangerousFoods"
           className={`form-input ${formik.errors.dangerousFoods && formik.touched.dangerousFoods ? 'error' : ''}`}
-          placeholder="במידה ויש לך מזונות המסכנים את בריאותך/אלרגיה למזון מסוים יש לכתוב את כולם"
+          placeholder="מזונות מסוכנים או אלרגיה"
           {...formik.getFieldProps('dangerousFoods')}
+          defaultValue={initialValues?.dangerousFoods || ''}
         />
         {formik.touched.dangerousFoods && formik.errors.dangerousFoods && (
           <div className="error-message">{formik.errors.dangerousFoods}</div>
         )}
       </div>
+
       <div className="button-group">
-            <button type="button" className="next-button" onClick={goNext}>הבא →</button>
-            <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
+        <button type="button" className="next-button" onClick={goNext}>הבא →</button>
+        <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
       </div>
     </div>
   );
 }
+
+
 
 
 

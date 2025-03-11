@@ -1,3 +1,4 @@
+/* הגדרות כלליות לגוף הדף */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
@@ -12,7 +13,7 @@ h1 {
   margin-top: 20px;
 }
 
-/* Container עבור הדף */
+/* Container עבור הדשבורד */
 .dashboard-container {
   max-width: 800px;
   margin: 40px auto;

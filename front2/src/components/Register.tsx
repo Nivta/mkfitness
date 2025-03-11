@@ -5,11 +5,11 @@ import PersonalInfo from './PersonalInfo'; // רכיב המידע האישי
 import HealthInfo from './HealthInfo'; // רכיב המידע הבריאותי
 import DietaryPreferences from './DietaryPreferences'; // רכיב העדפות תזונה
 import ProcessTypeAndTrainingLocation from './ProcessTypeAndTrainingLocation'; // רכיב סוג תהליך ומיקום אימון
-import { FormValues } from '../data/FormValuesRegister'; // סוג הנתונים של הטופס
 import { registerAction } from "../data/registerAction"; // ייבוא הפונקציה שמטפלת בהגשת הטופס
 import "../styles/Register.css"; // סגנונות לקובץ הרישום
 import { validationSchema } from '../data/validationSchemaRegistry';
 import HealthDeclaration from './HealthDeclaration';
+import { User } from '../data/UserType';
 
 export default function Register() {
   // מצב של שליחה וסטטוסים (מה קורה במהלך ואחרי השליחה)
@@ -21,30 +21,29 @@ export default function Register() {
   const [step, setStep] = useState(1);
 
   // שימוש ב-Formik לניהול הטופס
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      fullName: '', // שם מלא
-      email: '', // כתובת אימייל
-      idNumber: '', // תעודת זהות
-      password: '', // סיסמה
-      phone: '', // טלפון
-      age: 0, // גיל
-      height: 0, // גובה
-      weight: 0, // משקל
-      gender: '', // מין
-      activityLevel: '', // רמת פעילות
-      eatsEggs: false, // אוכל ביצים
-      eatsDairy: false, // אוכל מוצרי חלב
-      eatsFish: false, // אוכל דגים
-      goal: '', // מטרת דיאטה
-      dangerousFoods: '', // מאכלים מסוכנים
-      favoriteFoods: '', // מאכלים אהובים
-      dislikeFoods: '', // מאכלים שלא אהובים
-      trainingLocation: '', // מיקום אימון
-      acceptTerms: false, // הסכמה לתנאים והגבלות
-      diet: null, // דיאטה
-      dailyCalories: null, // קלוריות יומיות
-      healthQuestions: [
+  const formik = useFormik<User>({
+    initialValues:  {
+      fullName: '',
+      email: '',
+      idNumber: '',
+      password: '',
+      phone: '',
+      age: 0,
+      height: 0,
+      weight: 0,
+      gender: '',
+      activityLevel: '',
+      dangerousFoods:[],
+      diet: null,
+      eatsEggs: false,
+      eatsDairy: false,
+      eatsFish: false,
+      favoriteFoods: [],
+      dislikeFoods: [],
+      goal: '',
+      trainingLocation: '',
+      acceptTerms: false,
+      healthQuestions:  [
         { question: "האם חווית אובדן הכרה מכל סיבה שהיא?", answer: "" },
         { question: "האם חווית אירועי עילפון?", answer: "" },
         { question: "האם חווית פעולות חוזרות בלתי מוסברות?", answer: "" },
@@ -57,6 +56,8 @@ export default function Register() {
         { question: "האם אתה גבר מעל גיל 55 או אישה מעל גיל 65?", answer: "" },
         { question: "האם עברת בדיקות רפואיות בשלושת החודשים האחרונים בהן נאמר לך להימנע מפעילות גופנית?", answer: "" },
       ],
+      status: 'pending',
+      dailyCalories: 0,
     },
     validationSchema,  // החיבור לאימות
     validateOnChange: true,  // ודא שהאימות קורה על שינוי
@@ -113,9 +114,9 @@ export default function Register() {
       case 3:
         return Object.keys(formik.values.healthQuestions); // כל השאלות הבריאותיות
       case 4:
-        return ["goal", "dangerousFoods", "favoriteFoods", "dislikeFoods"];
+        return [ "dangerousFoods", "favoriteFoods", "dislikeFoods"];
       case 5:
-        return ["trainingLocation", "acceptTerms"];
+        return ["goal","trainingLocation", "acceptTerms"];
       default:
         return [];
     }
@@ -139,7 +140,7 @@ export default function Register() {
         <div className="card-content">
           {/* טופס ההרשמה */}
           <form onSubmit={handleSubmit} className="registration-form">
-            {step === 1 && <PersonalInfo formik={formik} goNext={handleNext} />}
+            {step === 1 && <PersonalInfo formik={formik} goNext={handleNext} isEditMode={false} />}
             {step === 2 && <HealthInfo formik={formik} goNext={handleNext} goBack={handleBack} />}
             {step === 3 && <HealthDeclaration formik={formik} goNext={handleNext} goBack={handleBack} />}
             {step === 4 && <DietaryPreferences formik={formik} goNext={handleNext} goBack={handleBack} />}

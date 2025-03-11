@@ -1,13 +1,15 @@
 import { FormikProps } from 'formik';
-import { FormValues } from '../data/FormValuesRegister';
+
+import { User } from '../data/UserType';
 
 interface DietaryPreferencesProps {
-  formik: FormikProps<FormValues>;
+  formik: FormikProps<User>;
   goNext: () => void;
   goBack: () => void;
+  initialValues?: User; // אפשרות לקבל ערכים אם מדובר בעריכה
 }
 
-export default function DietaryPreferences({ formik, goNext, goBack }: DietaryPreferencesProps) {
+export default function DietaryPreferences({ formik, goNext, goBack, initialValues }: DietaryPreferencesProps) {
   const { diet, eatsEggs, eatsDairy, eatsFish } = formik.values;
 
   const isMeatSelected = diet === 'meat';
@@ -112,7 +114,11 @@ export default function DietaryPreferences({ formik, goNext, goBack }: DietaryPr
           id="favoriteFoods"
           rows={4}
           {...formik.getFieldProps('favoriteFoods')}
+          defaultValue={initialValues?.favoriteFoods || ''} // קריאה לערכים במקרה של עריכה
         />
+        {formik.touched.favoriteFoods && formik.errors.favoriteFoods && (
+          <div className="error-message">{formik.errors.favoriteFoods}</div>
+        )}
       </div>
 
       {/* שדה עבור אוכל לא מועדף */}
@@ -122,8 +128,13 @@ export default function DietaryPreferences({ formik, goNext, goBack }: DietaryPr
           id="dislikeFoods"
           rows={4}
           {...formik.getFieldProps('dislikeFoods')}
+          defaultValue={initialValues?.dislikeFoods || ''} // קריאה לערכים במקרה של עריכה
         />
+        {formik.touched.dislikeFoods && formik.errors.dislikeFoods && (
+          <div className="error-message">{formik.errors.dislikeFoods}</div>
+        )}
       </div>
+
       <div className="button-group">
         <button type="button" className="next-button" onClick={goNext}>הבא →</button>
         <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
@@ -131,6 +142,12 @@ export default function DietaryPreferences({ formik, goNext, goBack }: DietaryPr
     </div>
   );
 }
+
+
+
+
+
+
 
 
 

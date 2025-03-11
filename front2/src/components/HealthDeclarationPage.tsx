@@ -2,13 +2,14 @@ import { User } from "../data/UserType"
 import { useNavigate } from "react-router-dom";
 interface HealthDeclarationPageProps {
     selectedUser: User | null;
+    navigateUrl:string
 }
 interface HealthQuestion {
   question: string;
   answer: string;
 }
 
-export default function HealthDeclarationPage({ selectedUser }: HealthDeclarationPageProps) {
+export default function HealthDeclarationPage({ selectedUser,navigateUrl }: HealthDeclarationPageProps) {
     const nav=useNavigate()
   if (!selectedUser) return <div>לא נמצא משתמש</div>;
 
@@ -35,8 +36,8 @@ export default function HealthDeclarationPage({ selectedUser }: HealthDeclaratio
 ))}
 
       </ul>
-      <button onClick={() => nav("/adminDashbord")}>
-        חזרה לדף ניהול
+      <button onClick={() => nav(navigateUrl)}>
+        חזרה 
       </button>
 
     </div>

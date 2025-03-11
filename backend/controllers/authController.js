@@ -19,7 +19,6 @@ const login = async (req, res) => {
     const user = await User.findOne({ email, status: 'active' });
     if (user) {
         const isValidPassword = await bcrypt.compare(password, user.password);
-        console.log(isValidPassword)
         if (isValidPassword) {
             return res.json({ userType: 'user', user });
         }

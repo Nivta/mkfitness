@@ -1,6 +1,3 @@
-/* AdminPanel.css */
-
-/* Admin Dashboard */
 .admin-dashboard {
     min-height: 100vh;
     background-color: #f8fafc;
@@ -70,7 +67,7 @@
 .users-list {
     border: 1px solid #e2e8f0;
     border-radius: 8px;
-    overflow-x: auto;  /* אפשרות לגלול ימינה ושמאלה */
+    overflow-x: auto;
     margin-bottom: 2rem;
 }
 
@@ -197,16 +194,24 @@
     vertical-align: middle;
 }
 
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 16px;
+    margin-top: 1rem;
+    text-align: center;
+}
+
 /* Responsive Styles */
 
 /* For Tablets (max-width: 900px) */
 @media (max-width: 900px) {
     .list-header {
-        grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 עמודות במקום 6 */
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
     .list-item {
-        grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 עמודות במקום 6 */
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
     .search-input {
@@ -241,17 +246,18 @@
     }
 
     .list-header {
-        grid-template-columns: 1fr; /* עמודה אחת במקום כמה */
+        grid-template-columns: 1fr;
     }
 
     .list-item {
-        grid-template-columns: 1fr; /* עמודה אחת במקום כמה */
+        grid-template-columns: 1fr;
     }
 
     .button {
         padding: 0.3rem 0.7rem;
     }
 }
+
 
 
   

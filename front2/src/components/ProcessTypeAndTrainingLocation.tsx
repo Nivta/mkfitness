@@ -1,16 +1,26 @@
 import { FormikProps } from 'formik';
-import { FormValues } from '../data/FormValuesRegister';
+
 import { useState } from 'react';
+import { User } from '../data/UserType';
 
 interface ProcessTypeAndTrainingLocationProps {
-  formik: FormikProps<FormValues>;
+  formik: FormikProps<User>;
   goBack: () => void;
+  initialValues?: User; // הוספתי אפשרות לקבל ערכים בהגדרה, לצורך עריכה
 }
 
-export default function ProcessTypeAndTrainingLocation({ formik,goBack }: ProcessTypeAndTrainingLocationProps) {
+export default function ProcessTypeAndTrainingLocation({
+  formik, 
+  goBack, 
+  initialValues
+}: ProcessTypeAndTrainingLocationProps) {
   // יצירת מצב לפוקוס של כל select
   const [processTypeFocused, setProcessTypeFocused] = useState(false);
   const [trainingLocationFocused, setTrainingLocationFocused] = useState(false);
+
+  // שימוש בערכים הראשוניים אם מדובר בעריכה
+  const selectedProcessType = initialValues?.goal || formik.values.goal;
+  const selectedTrainingLocation = initialValues?.trainingLocation || formik.values.trainingLocation;
 
   return (
     <div className="form-section">
@@ -23,6 +33,7 @@ export default function ProcessTypeAndTrainingLocation({ formik,goBack }: Proces
           {...formik.getFieldProps('goal')}
           onFocus={() => setProcessTypeFocused(true)} // כשלוחצים על ה- select
           onBlur={() => setProcessTypeFocused(false)} // כשלוחצים מחוץ ל- select
+          value={selectedProcessType} // לוודא שהערך נשאר עקבי בעריכה
         >
           {!processTypeFocused && <option value="">בחר סוג תהליך</option>} {/* רק אם לא בפוקוס תציג את האופציה הזו */}
           <option value="weightLoss">חיטוב וירידה במשקל</option>
@@ -40,6 +51,7 @@ export default function ProcessTypeAndTrainingLocation({ formik,goBack }: Proces
           {...formik.getFieldProps('trainingLocation')}
           onFocus={() => setTrainingLocationFocused(true)} // כשלוחצים על ה- select
           onBlur={() => setTrainingLocationFocused(false)} // כשלוחצים מחוץ ל- select
+          value={selectedTrainingLocation} // לוודא שהערך נשאר עקבי בעריכה
         >
           {!trainingLocationFocused && <option value="">אני רוצה לקבל תוכנית אימון</option>} {/* רק אם לא בפוקוס תציג את האופציה הזו */}
           <option value="home">בית</option>
@@ -51,10 +63,10 @@ export default function ProcessTypeAndTrainingLocation({ formik,goBack }: Proces
         )}
       </div>
       <div className="button-group">
-            <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
-            
-          </div>
+        <button type="button" className="prev-button" onClick={goBack}>← הקודם</button>
+      </div>
     </div>
   );
 }
+
 

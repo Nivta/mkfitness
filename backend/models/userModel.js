@@ -12,9 +12,9 @@ const userSchema = mongoose.Schema({
   weight: { type: Number, required: true },
   dailyCalories: { type: Number, required: true },
   activityLevel: { type: String, required: false },
-  dangerousFoods: { type: String, required: false },
-  favoriteFoods: { type: String, required: false },
-  dislikeFoods: { type: String, required: false },
+  dangerousFoods: { type: [String], required: false },  // שינוי למערך של מחרוזות
+  favoriteFoods: { type: [String], required: false },   // שינוי למערך של מחרוזות
+  dislikeFoods: { type: [String], required: false },    // שינוי למערך של מחרוזות
   diet: { type: String, required: true },
   eatsEggs: { type: Boolean, required: false, default: false },
   eatsDairy: { type: Boolean, required: false, default: false },
@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema({
     question: { type: String, required: true },
     answer: { type: String, default: '' }
   }],
+  selectedTrainingPlan: { type: Object, required: false }, // השדה יהיה אובייקט ולא ObjectId
   status: { type: String, enum: ["pending", "active"], default: "pending" }
 });
 

@@ -17,45 +17,22 @@ interface LoginFormData {
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // ניהול מצב להצגת הסיסמה
   const [showPassword, setShowPassword] = useState(false);
 
-  // בדיקה אם עברו 10 דקות מאז ההתחברות
   useEffect(() => {
     const storedUserState = localStorage.getItem('userState');
+    if (!storedUserState) return;
 
-    if (storedUserState) {
-      const { user, token, loginTimestamp } = JSON.parse(storedUserState);
-      const currentTime = Date.now();
+    const { user, token,userType } = JSON.parse(storedUserState);
 
-      // אם עברו 3 שעות, ננתק את המשתמש
-      if (loginTimestamp && currentTime - loginTimestamp >3*60 * 60 * 1000) {
-        localStorage.removeItem('userState');
-        dispatch(setUser(null));
-        dispatch(setToken(null));
-        navigate('/');
-        return;
-      }
-
-      // עדכון ה-Redux עם פרטי המשתמש
-      dispatch(setUser(user));
-      if (token) dispatch(setToken(token));
-
-      // הגדרת טיימר לניתוק אוטומטי בעוד הזמן שנותר
-      const timeLeft = 3*60 * 60 * 1000 - (currentTime - loginTimestamp);
-      if (timeLeft > 0) {
-        setTimeout(() => {
-          localStorage.removeItem('userState');
-          dispatch(setUser(null));
-          dispatch(setToken(null));
-          navigate('/');
-        }, timeLeft);
-      }
+    // אם יש מידע ב-localStorage, נעדכן את Redux עם פרטי המשתמש
+    dispatch(setUser(user));  // עדכון Redux עם המידע של המשתמש
+    if (token) {
+      dispatch(setToken(token));  // אם יש טוקן, מעדכנים את Redux
+      navigate(userType === 'admin' ? '/adminDashbord' : '/dashboard');
     }
   }, [dispatch, navigate]);
 
-  // הגדרת טופס עם Formik
   const formik = useFormik<LoginFormData>({
     initialValues: {
       email: '',
@@ -66,21 +43,23 @@ export default function Login() {
       password: Yup.string().required('שדה חובה'),
     }),
     onSubmit: async (values, { setSubmitting, setStatus }) => {
+      console.log('הגשה של טופס התחברות');
       try {
-        const userType = await login(values, setStatus);
-        if (userType) {
-          // יצירת נתוני המשתמש ושמירת זמן ההתחברות
-          const userState = {
-            user: userType,
-            token: userType === 'admin' ? 'admin-token' : null, // טוקן למנהלים בלבד
-            loginTimestamp: Date.now(), // שמירת זמן הכניסה
-          };
+        await login(values, setStatus);  // עכשיו login לא מחזירה שום דבר, אלא רק שומרת ב-localStorage
 
-          localStorage.setItem('userState', JSON.stringify(userState));
-
-          // ניתוב לפי סוג המשתמש
-          navigate(userType === 'admin' ? '/adminDashbord' : '/dashboard');
+        // קריאה ל-localStorage
+        const storedUserState = JSON.parse(localStorage.getItem('userState') || '{}');
+        const user = storedUserState.user;  // קבלת פרטי המשתמש מה-localStorage
+        const token = storedUserState.token;  // קבלת הטוקן מה-localStorage
+        
+        // עדכון Redux עם פרטי המשתמש
+        dispatch(setUser(user));
+        if (token) {
+          dispatch(setToken(token));  // אם יש טוקן, נעדכן את Redux
         }
+
+        // ניתוב לפי סוג המשתמש
+        navigate( token ? '/adminDashbord' : '/dashboard');
       } catch (error) {
         console.error('Login error:', error);
       } finally {
@@ -94,7 +73,6 @@ export default function Login() {
       <div className="login-card">
         <h2 className="login-title">התחברות למערכת</h2>
         <form onSubmit={formik.handleSubmit} noValidate>
-          
           {/* שדה אימייל */}
           <div className="form-group">
             <div className="input-icon">
@@ -106,9 +84,7 @@ export default function Login() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`login-input ${
-                  formik.touched.email && formik.errors.email ? 'login-error' : ''
-                }`}
+                className={`login-input ${formik.touched.email && formik.errors.email ? 'login-error' : ''}`}
               />
               <UserIcon size={20} />
             </div>
@@ -116,7 +92,6 @@ export default function Login() {
               <div className="login-error-text">{formik.errors.email}</div>
             )}
           </div>
-
           {/* שדה סיסמה עם אפשרות הצגה */}
           <div className="form-group">
             <div className="input-icon">
@@ -128,16 +103,13 @@ export default function Login() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`login-input ${
-                  formik.touched.password && formik.errors.password ? 'login-error' : ''
-                }`}
+                className={`login-input ${formik.touched.password && formik.errors.password ? 'login-error' : ''}`}
               />
               <LockIcon size={20} />
             </div>
             {formik.touched.password && formik.errors.password && (
               <div className="login-error-text">{formik.errors.password}</div>
             )}
-
             {/* Checkbox להצגת הסיסמה */}
             <div className="checkbox-group">
               <input
@@ -149,14 +121,12 @@ export default function Login() {
               <label htmlFor="showPassword">הצג סיסמה</label>
             </div>
           </div>
-
           {/* הצגת הודעת שגיאה אם קיימת */}
           {formik.status && (
             <div className="login-alert">
               <div className="login-alert-text">{formik.status}</div>
             </div>
           )}
-
           {/* כפתור התחברות */}
           <button
             type="submit"
@@ -165,7 +135,6 @@ export default function Login() {
           >
             {formik.isSubmitting ? 'מתחבר...' : 'התחבר'}
           </button>
-
           {/* קישור ליצירת חשבון חדש */}
           <div className="register-link">
             <p>אין לך חשבון?</p>
@@ -178,3 +147,5 @@ export default function Login() {
     </div>
   );
 }
+
+
