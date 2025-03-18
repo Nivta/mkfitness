@@ -8,7 +8,12 @@ import { User } from '../data/UserType';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import apiURL from '../data/apiConfig';
-
+interface Exercise {
+  name: string;
+  repetitions: number;
+  weight?: number;
+  tips: string;
+}
 interface dashbordProps {
   setNavigateUrl: (str: string) => void;
   setSelectedUser(user: User | null): void;
@@ -151,7 +156,17 @@ export default function Dashboard({ setSelectedUser, setNavigateUrl }: dashbordP
         ) : trainingPlan ? (
           <div className="training-plan-info">
             <h3>תוכנית האימון שלך</h3>
-            <p><strong>תרגילים:</strong> {trainingPlan.exercises.join(',')}</p>
+            <p><strong>תרגילים:</strong></p>
+<ul>
+  {trainingPlan.exercises.map((exercise:Exercise) => (
+    <li >
+      <strong>{exercise.name}</strong> - {exercise.repetitions} חזרות 
+      {exercise.weight ? ` עם משקל של ${exercise.weight} ק"ג` : ''}  
+      <br />
+      <em>טיפ:</em> {exercise.tips}
+    </li>
+  ))}
+</ul>
             <p><strong>סך הכל קלוריות:</strong> {trainingPlan.totalCalories}</p>
             <p><strong>מזון:</strong> {trainingPlan.foods.join(',')}</p>
             <p><strong>רמת קושי:</strong> 
