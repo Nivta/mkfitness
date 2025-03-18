@@ -6,7 +6,8 @@ const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const trainingProgramRoutes = require('./routes/trainingProgramRoutes'); 
-const dietRoutes = require('./routes/dietRoutes'); 
+const dietRoutes = require('./routes/dietRoutes');
+const measurementRoutes=require ("./routes/measurementsRouts.js"); 
 const path = require('path');
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/training-programs', trainingProgramRoutes);
 app.use('/api/diet-request', dietRoutes);
+app.use("/api/measurements", measurementRoutes);
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../front2/dist', 'index.html')); // תקן את הנתיב הזה אם יש שינוי במיקום
   });

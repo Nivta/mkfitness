@@ -103,10 +103,7 @@ export default function Dashboard({ setSelectedUser, setNavigateUrl }: dashbordP
         <h2>שלום, {user?.fullName}!</h2>
         <p>אימייל: {user?.email}</p>
         
-        {/* כפתור התנתקות */}
-        <button className="logout-btn" onClick={Logout}>
-          <LogOut /> התנתקות
-        </button>
+
 
         {/* כפתור לשליחת בקשה למנהל להוריד קלוריות */}
         <button className="request-lower-calories-btn" onClick={requestLowerCalories}>
@@ -128,6 +125,23 @@ export default function Dashboard({ setSelectedUser, setNavigateUrl }: dashbordP
         </button>
         <button className="update-profile-btn" onClick={goToUpdateProfile}>
           שינוי פרטי ההרשמה
+        </button>
+        {/* כפתור למדידות */}
+        <button className="measurements-btn" onClick={() =>{ 
+          if (user && "idNumber" in user) {
+            setSelectedUser(user);
+          }
+          setNavigateUrl("/dashboard");
+          nav("/measurements")}}>
+          מעבר למדידות
+        </button>
+        <button className="measurements-btn" onClick={() =>{ 
+          if (user && "idNumber" in user) {
+            setSelectedUser(user);
+          }
+          setNavigateUrl("/dashboard");
+          nav("/measurements-list")}}>
+          היסטורית מדידות 
         </button>
         {/* הצגת תוכנית האימון */}
         {isLoading ? (
@@ -159,6 +173,10 @@ export default function Dashboard({ setSelectedUser, setNavigateUrl }: dashbordP
         ) : (
           <p>לא נמצאה תוכנית אימון.</p>
         )}
+            {/* כפתור התנתקות */}
+                <button className="logout-btn" onClick={Logout}>
+          <LogOut /> התנתקות
+        </button>
       </div>
     </div>
   );

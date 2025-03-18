@@ -14,6 +14,9 @@ import apiURL from './data/apiConfig';
 import HealthDeclarationPage from './components/HealthDeclarationPage';
 import { User } from './data/UserType';
 import EditProfile from './components/EditProfile';
+// import Measurements from './components/Measurements';
+import AddMeasurement from './components/AddMeasurement';
+import MeasurementList from './components/MeasurementList';
 
 
 export default function App() {
@@ -48,7 +51,9 @@ console.log(process.env)
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/registerAdmin" element={<AdminRegistration />} />
-        <Route path="//Edit-profile" element={<EditProfile />} />
+        <Route path="/Edit-profile" element={<EditProfile />} />
+        <Route path="/measurements" element={<AddMeasurement idNumber={selectedUser?.idNumber} navigateUrl={navigateUrl} />} />
+        <Route path="/measurements-list" element={<MeasurementList idNumber={selectedUser?.idNumber} navigateUrl={navigateUrl} />} />
         <Route path="/health-declaration" element={<HealthDeclarationPage selectedUser={selectedUser} navigateUrl={navigateUrl} />} />
         
         {/* עטיפת ה-Routes שדורשים גישה פרטית בתוך ה-PrivateRoute */}
