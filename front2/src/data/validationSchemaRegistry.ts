@@ -19,7 +19,7 @@ export const validationSchema = Yup.object({
   eatsEggs: Yup.boolean(),
   eatsDairy: Yup.boolean(),
   eatsFish: Yup.boolean(),
-  goal: Yup.string(),
+  goal: Yup.string().required("סוג אימון חובה"),
   dangerousFoods: Yup.string(),
   favoriteFoods: Yup.string(),
   dislikeFoods: Yup.string(),
