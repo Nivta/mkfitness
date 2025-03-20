@@ -20,7 +20,7 @@ const AdminRegistration = () => {
     onSubmit: async (values) => {
       try {
         // קריאה לשרת לשליחת נתוני ההרשמה
-        const response = await axios.post(apiURL+'/api/admin/register', values);
+        const response = await axios.post(apiURL+'/api/admin/register-admin', values);
         console.log('Admin Registered:', response.data);
         // כאן תוכל להציג הודעה או לבצע פעולה אחרת לאחר ההרשמה
         alert('Admin registered successfully!');

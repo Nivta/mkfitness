@@ -1,5 +1,8 @@
 const User = require('../models/userModel');
 const nodemailer = require('nodemailer');
+const Admin = require('../models/adminModel');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // פונקציה להצגת כל המשתמשים הממתינים
 const getPendingUsers = async (req, res) => {
     try {
@@ -95,5 +98,63 @@ const denyUser = async (req, res) => {
         res.status(500).json({ msg: 'Error denying and deleting user', error: error.message });
     }
 };
+const registerAdmin = async (req, res) => {
+    const { fullName, email, password } = req.body;
+    console.log('Received registration data:', { fullName, email, password });
+  
+    // בדיקה ידנית לוודא שכל השדות קיימים
+    if (!fullName || !email || !password) {
+      console.log('Missing required fields');
+      return res.status(400).json({ msg: 'fullName, email and password are required' });
+    }
+  
+    try {
+      // בדיקה אם האדמין כבר קיים
+      const existingAdmin = await Admin.findOne({ email });
+      if (existingAdmin) {
+        console.log('Admin already exists with email:', email);
+        return res.status(400).json({ msg: 'Admin already exists' });
+      }
+  
+      // הצפנת הסיסמה
+      console.log('Generating salt...');
+      const salt = await bcrypt.genSalt(10);
+      console.log('Hashing password...');
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      // יצירת אדמין חדש עם create
+      console.log('Creating new admin...');
+      const admin = await Admin.create({
+        fullName,
+        email,
+        password: hashedPassword,
+      });
+      console.log('Admin created successfully:', admin);
+  
+      // יצירת טוקן JWT ללא הגדרת expiresIn (תקף לנצח)
+      const payload = {
+        user: {
+          id: admin.id,
+        },
+      };
+  
+      console.log('Signing JWT...');
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET, // שימוש במפתח הסודי מהסביבה
+        (err, token) => {
+          if (err) {
+            console.error('Error signing token:', err);
+            throw err;
+          }
+          console.log('JWT generated successfully');
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error('Error in registerAdmin:', err.message);
+      res.status(500).send('Server error');
+    }
+  };
 
-module.exports = { getPendingUsers, approveUser, denyUser };
+module.exports = { getPendingUsers, approveUser, denyUser,registerAdmin };
